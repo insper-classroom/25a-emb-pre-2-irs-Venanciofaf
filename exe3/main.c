@@ -6,7 +6,7 @@ const int BTN_PIN_R = 28;
 const int BTN_PIN_G = 26;
 volatile uint32_t evento = 0;
 volatile uint gpio_main = 0;
-volatile btnFlag = 0;
+volatile int btnFlag = 0;
 
 void btn_callback(uint gpio, uint32_t events) {
     btnFlag = 1;

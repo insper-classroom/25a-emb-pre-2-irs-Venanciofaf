@@ -10,7 +10,7 @@ int LED_VERMELHO = 4;
 
 volatile uint32_t evento = 0;
 volatile uint gpio_main = 0;
-volatile btnFlag = 0;
+volatile int btnFlag = 0;
 
 void btn_callback(uint gpio, uint32_t events) {
   gpio_main = gpio;
@@ -43,22 +43,26 @@ int main() {
   gpio_init(LED_VERMELHO);
   gpio_set_dir(LED_VERMELHO, GPIO_OUT);
 
-  gpio_set_irq_enabled_with_callback(BTN_PIN_R, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &btn_callback);
-  
+  gpio_set_irq_enabled_with_callback(BTN_VERMELHO, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &btn_callback);
+  gpio_set_irq_enabled_with_callback(BTN_VERDE, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &btn_callback);
+
+
   bool estado_led_vermelho = false;
   bool estado_led_verde = false;
   while (true) {
 
     if (btnFlag){
       if (evento == 0x4) { // fall edge
-        if (gpio_main == BTN_VERMELHO)
+        if (gpio_main == BTN_VERMELHO){
           estado_led_vermelho = !estado_led_vermelho;
           gpio_put(LED_VERMELHO , estado_led_vermelho);
-      }
+         }
+        }
       if (evento == 0x8) { // rise edge
-        if (gpio_main == BTN_VERDE)
+        if (gpio_main == BTN_VERDE){
           estado_led_verde = !estado_led_verde;
           gpio_put(LED_VERDE , estado_led_verde);
+        }
       }
       btnFlag = 0;
     }
